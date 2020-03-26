@@ -14,7 +14,10 @@ class Modal extends Component {
   // which means checking the "show" props and changes to it
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.show !== this.props.show;
+    return (
+      nextProps.show !== this.props.show ||
+      nextProps.children !== this.props.children
+    );
   }
 
   // if the next received props "show" isnt same as current props "show"
