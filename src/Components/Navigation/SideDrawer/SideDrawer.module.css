@@ -1,0 +1,36 @@
+.SideDrawer {
+  position: fixed;
+  width: 280px;
+  max-width: 70%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  background-color: white;
+  padding: 32px 16px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+}
+
+/* query applies for devices that have min-width of 500px */
+@media (min-width: 500px) {
+  .SideDrawer {
+    display: none;
+  }
+}
+
+/* classes responsible for animations */
+/* open is for showing up the sideDrawer in the defined position above */
+.Open {
+  transform: translateX(0);
+}
+
+/* shifting sideDrawer to the left */
+.Close {
+  transform: translateX(-100%);
+}
+
+.Logo {
+  height: 11%;
+  margin-bottom: 10px;
+}
