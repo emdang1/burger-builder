@@ -3,8 +3,10 @@ import Burger from '../../Components/Burger/Burger';
 import BuildControls from '../../Components/Burger/BuildControls/BuildControls';
 import Modal from '../../Components/UI/Modal/Modal';
 import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary';
-import axios from '../../axios-orders';
 import Spinner from '../../Components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+
+import axios from '../../axios-orders';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -52,6 +54,7 @@ class BurgerBuilder extends React.Component {
     // officialy, price shouldnt be sent from frontend
     // it should be recalculated on the backend
     // we should just sent the needed data for the calculation
+    // we created a dummy order object
     const order = {
       ingredients: this.state.ingredients,
       price: this.state.totalPrice,
@@ -72,7 +75,7 @@ class BurgerBuilder extends React.Component {
       .post('/orders.json', order)
       .then(response => {
         // hiding the loading spinner after getting the response
-        // and closing the modal also
+        // and closing the modal also through purchasing state
         this.setState({ loading: false, purchasing: false });
       })
       .catch(error => {
@@ -146,4 +149,4 @@ class BurgerBuilder extends React.Component {
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
