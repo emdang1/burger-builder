@@ -10,12 +10,20 @@ const withErrorHandler = (WrappedComponent, axios) => {
       error: null
     };
 
-    componentDidMount() {
+    // this was changed from didMount to willMount
+    // because fetching data change
+    // it needs to be set up before didMounts in child components
+    // and thats possible only with willMount
+    // or we can do this in constructor
+    componentWillMount() {
       // first argument is function for request
       // here we are just reseting the "error state"
       // just to make sure it will be null for the response part
       // and at the end we need to return the request so it can continue
-      axios.interceptors.request.use(req => {
+
+      // in the last module video we stored the axios in the component property
+      // it holds the reference to the axios
+      this.reqInterceptor = axios.interceptors.request.use(req => {
         this.setState({ error: null });
         return req;
       });
@@ -23,12 +31,19 @@ const withErrorHandler = (WrappedComponent, axios) => {
       // we are setting the state when getting an error from the response
       // the error argument is an object - has message prop, so we can console log it later
       // and also in the first argument res=>res we are returning the response so it can continue
-      axios.interceptors.response.use(
+      this.resInterceptor = axios.interceptors.response.use(
         res => res,
         error => {
           this.setState({ error: error });
         }
       );
+    }
+
+    // here we are getting rid of the useless interceptors
+    componentWillUnmount() {
+      // console.log('will Unmount', this.reqInterceptor, this.resInterceptor)
+      axios.interceptors.request.eject(this.reqInterceptor);
+      axios.interceptors.response.eject(this.resInterceptor);
     }
 
     errorConfirmedHandler = () => {
