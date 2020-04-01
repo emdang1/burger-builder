@@ -10,7 +10,12 @@ const withErrorHandler = (WrappedComponent, axios) => {
       error: null
     };
 
-    componentDidMount() {
+    // this was changed from didMount to willMount
+    // because fetching data change
+    // it needs to be set up before didMounts in child components
+    // and thats possible only with willMount
+    // or we can do this in constructor
+    componentWillMount() {
       // first argument is function for request
       // here we are just reseting the "error state"
       // just to make sure it will be null for the response part

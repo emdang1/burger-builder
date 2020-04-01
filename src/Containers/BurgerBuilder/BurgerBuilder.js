@@ -7,6 +7,7 @@ import Spinner from '../../Components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import axios from '../../axios-orders';
+import burger from '../../Components/Burger/Burger';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -17,17 +18,30 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends React.Component {
   state = {
-    ingredients: {
-      salad: 0,
-      meat: 0,
-      cheese: 0,
-      bacon: 0
-    },
+    ingredients: null,
     purchasable: false,
     purchasing: false,
     totalPrice: 0,
-    loading: false
+    loading: false,
+    error: false
   };
+
+  // due to this fetching data change,
+  // the "ingredients" state is set to null
+  // after fetching the data we are setting the data object as ingredients state
+
+  // there are also other changes below, due to this change
+  // also we are catching the error, if theres problem to connecting to backend for example
+  componentDidMount() {
+    axios
+      .get('/ingredients.json')
+      .then(response => {
+        this.setState({ ingredients: response.data });
+      })
+      .catch(error => {
+        this.setState({ error: true });
+      });
+  }
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });
@@ -114,14 +128,45 @@ class BurgerBuilder extends React.Component {
       ...this.state.ingredients
     };
 
-    let orderSumOrSpinner = (
-      <OrderSummary
-        ingredients={this.state.ingredients}
-        purchaseCanceled={this.purchaseCancelHandler}
-        purchaseContinued={this.purchaseContinueHandler}
-        totalPrice={this.state.totalPrice.toFixed(2)}
-      />
+    // these variables are related to the fetching data change
+    // by default we have burgerOrSpinner as a spinner component
+    // or error paragraph
+    // and we are checking if the ingredients are "truthy" aka not null
+    // if so, the burgerOrspinner component is override to burger + burgercontrols
+    // and also we are overriding the orderSumOrSpinner component (since is dependent od the ingredients state)
+    // which is by default null
+    // it is then real orderSummary component
+    let orderSumOrSpinner = null;
+    let burgerOrSpinner = this.state.error ? (
+      <p>Ingredients can't be loaded</p>
+    ) : (
+      <Spinner />
     );
+
+    if (this.state.ingredients) {
+      burgerOrSpinner = (
+        <Fragment>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            disabled={disabledInfo}
+            price={this.state.totalPrice}
+            purchasable={this.state.purchasable}
+            ordered={this.purchaseHandler}
+          />
+        </Fragment>
+      );
+
+      orderSumOrSpinner = (
+        <OrderSummary
+          ingredients={this.state.ingredients}
+          purchaseCanceled={this.purchaseCancelHandler}
+          purchaseContinued={this.purchaseContinueHandler}
+          totalPrice={this.state.totalPrice.toFixed(2)}
+        />
+      );
+    }
 
     if (this.state.loading) {
       orderSumOrSpinner = <Spinner />;
@@ -135,15 +180,7 @@ class BurgerBuilder extends React.Component {
         >
           {orderSumOrSpinner}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          disabled={disabledInfo}
-          price={this.state.totalPrice}
-          purchasable={this.state.purchasable}
-          ordered={this.purchaseHandler}
-        />
+        {burgerOrSpinner}
       </Fragment>
     );
   }
