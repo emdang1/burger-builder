@@ -7,7 +7,6 @@ import Spinner from '../../Components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import axios from '../../axios-orders';
-import burger from '../../Components/Burger/Burger';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
