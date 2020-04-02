@@ -59,41 +59,57 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
-    // alert('You continue!');
+    // // alert('You continue!');
 
-    // showing loading spinner
-    this.setState({ loading: true });
+    // // showing loading spinner
+    // this.setState({ loading: true });
 
-    // officialy, price shouldnt be sent from frontend
-    // it should be recalculated on the backend
-    // we should just sent the needed data for the calculation
-    // we created a dummy order object
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'John Smith',
-        address: {
-          street: 'Ballers 12',
-          zipCode: '12345',
-          country: 'Kazachstan'
-        },
-        email: 'testytest@testytes.com'
-      },
-      deliveryMethod: 'fastest'
-    };
+    // // officialy, price shouldnt be sent from frontend
+    // // it should be recalculated on the backend
+    // // we should just sent the needed data for the calculation
+    // // we created a dummy order object
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'John Smith',
+    //     address: {
+    //       street: 'Ballers 12',
+    //       zipCode: '12345',
+    //       country: 'Kazachstan'
+    //     },
+    //     email: 'testytest@testytes.com'
+    //   },
+    //   deliveryMethod: 'fastest'
+    // };
 
-    // .json is needed because of firebase
-    axios
-      .post('/orders.json', order)
-      .then(response => {
-        // hiding the loading spinner after getting the response
-        // and closing the modal also through purchasing state
-        this.setState({ loading: false, purchasing: false });
-      })
-      .catch(error => {
-        this.setState({ loading: false, purchasing: false });
-      });
+    // // .json is needed because of firebase
+    // axios
+    //   .post('/orders.json', order)
+    //   .then(response => {
+    //     // hiding the loading spinner after getting the response
+    //     // and closing the modal also through purchasing state
+    //     this.setState({ loading: false, purchasing: false });
+    //   })
+    //   .catch(error => {
+    //     this.setState({ loading: false, purchasing: false });
+    //   });
+
+    const queryParams = [];
+
+    for (let ingrKey in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(ingrKey) +
+          '=' +
+          encodeURIComponent(this.state.ingredients[ingrKey])
+      );
+    }
+    const queryString = queryParams.join('&');
+
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
+    });
   };
 
   addIngredientHandler = type => {
