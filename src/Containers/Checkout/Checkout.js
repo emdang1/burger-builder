@@ -5,12 +5,8 @@ import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
   state = {
-    ingredients: {
-      salad: 1,
-      meat: 1,
-      cheese: 1,
-      bacon: 1
-    }
+    ingredients: null,
+    price: 0
   };
 
   // the config in componentDidMount will not be set again
@@ -19,13 +15,22 @@ class Checkout extends Component {
   // and the query parameters are gone
   // the parameters were extracted and pushed to localState
 
-  componentDidMount() {
+  componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     const ingredients = {};
+    let price = 0;
     for (let param of query.entries()) {
-      ingredients[param[0]] = +param[1];
+      //['salad', '1']
+      if (param[0] === 'price') {
+        price = param[1];
+      } else {
+        ingredients[param[0]] = +param[1];
+      }
     }
-    this.setState({ ingredients: ingredients });
+    this.setState({
+      ingredients: ingredients,
+      totalPrice: price
+    });
   }
 
   checkoutCancelledHandler = () => {
@@ -55,12 +60,29 @@ class Checkout extends Component {
         />
         <Route
           path={this.props.match.path + '/contact-data'}
-          component={ContactData}
+          render={props => (
+            <ContactData
+              ingredients={this.state.ingredients}
+              price={this.state.totalPrice}
+              {...props}
+            />
+          )}
         />
       </div>
     );
   }
 }
+// in the Route we are not using the "component" keyword
+// because we want to pass the "ingredients" state
+// therefore we have to use the "render" keyword
+// which is function that returns some JSX
+
+// since we are using the "render" keyword
+// by default ContactData will not have the special props like history, match etc.
+// so we have two choices
+// we can wrap up the ContactData component with hoc "withRouter" in the export
+// or we can pass the props through that function in render and spread it onto the
+// ContactData component
 
 // route here is nested route
 // and its used for loading another component

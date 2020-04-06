@@ -59,42 +59,6 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
-    // // alert('You continue!');
-
-    // // showing loading spinner
-    // this.setState({ loading: true });
-
-    // // officialy, price shouldnt be sent from frontend
-    // // it should be recalculated on the backend
-    // // we should just sent the needed data for the calculation
-    // // we created a dummy order object
-    // const order = {
-    //   ingredients: this.state.ingredients,
-    //   price: this.state.totalPrice,
-    //   customer: {
-    //     name: 'John Smith',
-    //     address: {
-    //       street: 'Ballers 12',
-    //       zipCode: '12345',
-    //       country: 'Kazachstan'
-    //     },
-    //     email: 'testytest@testytes.com'
-    //   },
-    //   deliveryMethod: 'fastest'
-    // };
-
-    // // .json is needed because of firebase
-    // axios
-    //   .post('/orders.json', order)
-    //   .then(response => {
-    //     // hiding the loading spinner after getting the response
-    //     // and closing the modal also through purchasing state
-    //     this.setState({ loading: false, purchasing: false });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ loading: false, purchasing: false });
-    //   });
-
     const queryParams = [];
 
     for (let ingrKey in this.state.ingredients) {
@@ -104,6 +68,10 @@ class BurgerBuilder extends React.Component {
           encodeURIComponent(this.state.ingredients[ingrKey])
       );
     }
+
+    // at the end of the array we are push the total Price information
+    // that will be used in the ContactData component, when we are sending the request to the BE
+    queryParams.push('price=' + this.state.totalPrice);
     const queryString = queryParams.join('&');
 
     this.props.history.push({
