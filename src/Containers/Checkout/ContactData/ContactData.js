@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from '../../../Components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import Spinner from '../../../Components/UI/Spinner/Spinner';
+import Input from '../../../Components/UI/Input/Input';
 
 import axios from '../../../axios-orders';
 
@@ -11,12 +12,12 @@ class ContactData extends Component {
     email: '',
     address: {
       street: '',
-      postalCode: ''
+      postalCode: '',
     },
-    loading: false
+    loading: false,
   };
 
-  orderHandler = event => {
+  orderHandler = (event) => {
     // prevents from default "sending request"
     event.preventDefault();
 
@@ -35,17 +36,17 @@ class ContactData extends Component {
         address: {
           street: 'Ballers 12',
           zipCode: '12345',
-          country: 'Kazachstan'
+          country: 'Kazachstan',
         },
-        email: 'testytest@testytes.com'
+        email: 'testytest@testytes.com',
       },
-      deliveryMethod: 'fastest'
+      deliveryMethod: 'fastest',
     };
 
     // .json is needed because of firebase
     axios
       .post('/orders.json', order)
-      .then(response => {
+      .then((response) => {
         // hiding the loading spinner after getting the response
         // and closing the modal also  through purchasing state
         // purchasing state was removed ... this whole code for transfered
@@ -56,7 +57,7 @@ class ContactData extends Component {
         this.setState({ loading: false });
         this.props.history.push('/');
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ loading: false });
       });
   };
@@ -64,29 +65,33 @@ class ContactData extends Component {
   render() {
     let formOrSpinner = (
       <form>
-        <input
-          className={classes.Input}
+        <Input
+          inputtype='input'
           type='text'
           name='name'
           placeholder='Your name'
+          label='Name'
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputtype='input'
           type='email'
           name='email'
           placeholder='Your email'
+          label='Email'
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputtype='input'
           type='text'
           name='street'
           placeholder='Street'
+          label='Street'
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputtype='input'
           type='text'
           name='postal'
           placeholder='Postal Code'
+          label='PostalCode'
         />
         <Button btnType='Success' clicked={this.orderHandler}>
           ORDER
