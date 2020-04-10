@@ -7,12 +7,59 @@ import Input from '../../../Components/UI/Input/Input';
 import axios from '../../../axios-orders';
 
 class ContactData extends Component {
+  // order form config for dynamically outputing the custom input elements
   state = {
-    name: '',
-    email: '',
-    address: {
-      street: '',
-      postalCode: '',
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your name',
+        },
+        value: '',
+      },
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street',
+        },
+        value: '',
+      },
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Zip Code',
+        },
+        value: '',
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country',
+        },
+        value: '',
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'E-mail',
+        },
+        value: '',
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            { value: 'fastest', displayValue: 'Fastest' },
+            { value: 'cheapest', displayValue: 'Cheapest' },
+          ],
+        },
+        value: '',
+      },
     },
     loading: false,
   };
@@ -31,16 +78,6 @@ class ContactData extends Component {
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
-      customer: {
-        name: 'John Smith',
-        address: {
-          street: 'Ballers 12',
-          zipCode: '12345',
-          country: 'Kazachstan',
-        },
-        email: 'testytest@testytes.com',
-      },
-      deliveryMethod: 'fastest',
     };
 
     // .json is needed because of firebase
@@ -62,37 +99,47 @@ class ContactData extends Component {
       });
   };
 
+  inputChangedHandler = (event, inputIdentifier) => {
+    // copying the whole state - but only one level deep
+    const updatedOrderForm = {
+      ...this.state.orderForm,
+    };
+
+    // copying the single element (name, country etc.)
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+
+    // accessing value property of that copied element and changing it to event.target.value
+    updatedFormElement.value = event.target.value;
+
+    // putting the newly updated single element into copied form state to the right prop
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+    // setting state by putting newly updatedOrderForm to the orderForm prop
+    this.setState({ orderForm: updatedOrderForm });
+  };
+
   render() {
+    // tranforming orderForm state object into separate element objects in array
+    let orderFormArray = [];
+    for (let key in this.state.orderForm) {
+      orderFormArray.push({
+        id: key,
+        config: this.state.orderForm[key],
+      });
+    }
+
     let formOrSpinner = (
       <form>
-        <Input
-          inputtype='input'
-          type='text'
-          name='name'
-          placeholder='Your name'
-          label='Name'
-        />
-        <Input
-          inputtype='input'
-          type='email'
-          name='email'
-          placeholder='Your email'
-          label='Email'
-        />
-        <Input
-          inputtype='input'
-          type='text'
-          name='street'
-          placeholder='Street'
-          label='Street'
-        />
-        <Input
-          inputtype='input'
-          type='text'
-          name='postal'
-          placeholder='Postal Code'
-          label='PostalCode'
-        />
+        {orderFormArray.map((element) => (
+          <Input
+            key={element.id}
+            elementType={element.config.elementType}
+            elementConfig={element.config.elementConfig}
+            value={element.config.value}
+            changed={(event) => this.inputChangedHandler(event, element.id)}
+          />
+        ))}
+
         <Button btnType='Success' clicked={this.orderHandler}>
           ORDER
         </Button>
