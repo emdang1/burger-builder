@@ -68,6 +68,11 @@ class ContactData extends Component {
     // prevents from default "sending request"
     event.preventDefault();
 
+    let formData = {};
+    for (let key in this.state.orderForm) {
+      formData[key] = this.state.orderForm[key].value;
+    }
+
     // showing loading spinner
     this.setState({ loading: true });
 
@@ -78,6 +83,7 @@ class ContactData extends Component {
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
+      orderData: formData,
     };
 
     // .json is needed because of firebase
@@ -129,7 +135,7 @@ class ContactData extends Component {
     }
 
     let formOrSpinner = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {orderFormArray.map((element) => (
           <Input
             key={element.id}
@@ -140,9 +146,7 @@ class ContactData extends Component {
           />
         ))}
 
-        <Button btnType='Success' clicked={this.orderHandler}>
-          ORDER
-        </Button>
+        <Button btnType='Success'>ORDER</Button>
       </form>
     );
 
