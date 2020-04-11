@@ -85,9 +85,12 @@ class ContactData extends Component {
             { value: 'cheapest', displayValue: 'Cheapest' },
           ],
         },
+        validation: {},
         value: '',
+        valid: true,
       },
     },
+    formIsValid: false,
     loading: false,
   };
 
@@ -180,8 +183,17 @@ class ContactData extends Component {
     // putting the newly updated single element into copied form state to the right prop
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
+    // after all changes, we need to make sure our whole form is valid
+    // aka go through every single element and its .valid prop
+    // using the "&& trick"
+
+    let formIsValid = true;
+    for (let elementKey in updatedOrderForm) {
+      formIsValid = updatedOrderForm[elementKey].valid && formIsValid;
+    }
+
     // setting state by putting newly updatedOrderForm to the orderForm prop
-    this.setState({ orderForm: updatedOrderForm });
+    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   };
 
   render() {
@@ -209,7 +221,9 @@ class ContactData extends Component {
           />
         ))}
 
-        <Button btnType='Success'>ORDER</Button>
+        <Button btnType='Success' disabled={!this.state.formIsValid}>
+          ORDER
+        </Button>
       </form>
     );
 
