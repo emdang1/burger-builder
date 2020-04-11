@@ -17,6 +17,11 @@ class ContactData extends Component {
           placeholder: 'Your name',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       street: {
         elementType: 'input',
@@ -25,6 +30,11 @@ class ContactData extends Component {
           placeholder: 'Street',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       zipCode: {
         elementType: 'input',
@@ -33,6 +43,13 @@ class ContactData extends Component {
           placeholder: 'Zip Code',
         },
         value: '',
+        validation: {
+          required: true,
+          minLength: 3,
+          maxLength: 5,
+        },
+        valid: false,
+        touched: false,
       },
       country: {
         elementType: 'input',
@@ -41,6 +58,11 @@ class ContactData extends Component {
           placeholder: 'Country',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       email: {
         elementType: 'input',
@@ -49,6 +71,11 @@ class ContactData extends Component {
           placeholder: 'E-mail',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        valid: false,
+        touched: false,
       },
       deliveryMethod: {
         elementType: 'select',
@@ -105,6 +132,29 @@ class ContactData extends Component {
       });
   };
 
+  // method to check if the input is valid or not
+  // returns true / false
+  checkValidity = (inputValue, rules) => {
+    let isValid = true;
+
+    // if there's required prop defined for this input
+    // set isValid to true - if trimmed inputValue is not equal to an empty string
+    // && true value trick = every check needs to pass or "isValid" will be false from the first problem
+    if (rules.required) {
+      isValid = inputValue.trim() !== '' && isValid;
+    }
+
+    if (rules.minLength) {
+      isValid = inputValue.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = inputValue.length <= rules.maxLength && isValid;
+    }
+
+    return isValid;
+  };
+
   inputChangedHandler = (event, inputIdentifier) => {
     // copying the whole state - but only one level deep
     const updatedOrderForm = {
@@ -116,6 +166,16 @@ class ContactData extends Component {
 
     // accessing value property of that copied element and changing it to event.target.value
     updatedFormElement.value = event.target.value;
+
+    // changing the "touched" prop
+    updatedFormElement.touched = true;
+
+    // ------------ input validity check - before updating the copied object and putting it in the state
+    // after verifying, we are setting the valid property to respective value
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
 
     // putting the newly updated single element into copied form state to the right prop
     updatedOrderForm[inputIdentifier] = updatedFormElement;
@@ -143,6 +203,9 @@ class ContactData extends Component {
             elementConfig={element.config.elementConfig}
             value={element.config.value}
             changed={(event) => this.inputChangedHandler(event, element.id)}
+            shouldValidate={element.config.validation}
+            valid={element.config.valid}
+            touched={element.config.touched}
           />
         ))}
 
