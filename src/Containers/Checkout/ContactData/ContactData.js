@@ -5,6 +5,7 @@ import Spinner from '../../../Components/UI/Spinner/Spinner';
 import Input from '../../../Components/UI/Input/Input';
 
 import axios from '../../../axios-orders';
+import { connect } from 'react-redux';
 
 class ContactData extends Component {
   // order form config for dynamically outputing the custom input elements
@@ -111,7 +112,7 @@ class ContactData extends Component {
     // we should just sent the needed data for the calculation
     // we created a dummy order object
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData,
     };
@@ -239,4 +240,9 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = (state) => ({
+  ings: state.ingredients,
+  price: state.totalPrice,
+});
+
+export default connect(mapStateToProps)(ContactData);

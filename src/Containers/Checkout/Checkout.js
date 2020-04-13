@@ -2,36 +2,14 @@ import React, { Component } from 'react';
 import CheckoutSummary from '../../Components/Order/CheckoutSummary/CheckoutSummary';
 import { Route } from 'react-router-dom';
 import ContactData from './ContactData/ContactData';
+import { connect } from 'react-redux';
 
 class Checkout extends Component {
-  state = {
-    ingredients: null,
-    price: 0
-  };
-
   // the config in componentDidMount will not be set again
   // eventhough we are loading a new component through the route
   // therefore the url is changed
   // and the query parameters are gone
   // the parameters were extracted and pushed to localState
-
-  componentWillMount() {
-    const query = new URLSearchParams(this.props.location.search);
-    const ingredients = {};
-    let price = 0;
-    for (let param of query.entries()) {
-      //['salad', '1']
-      if (param[0] === 'price') {
-        price = param[1];
-      } else {
-        ingredients[param[0]] = +param[1];
-      }
-    }
-    this.setState({
-      ingredients: ingredients,
-      totalPrice: price
-    });
-  }
 
   checkoutCancelledHandler = () => {
     // since checkout component is hooked to react router through route
@@ -54,19 +32,13 @@ class Checkout extends Component {
     return (
       <div>
         <CheckoutSummary
-          ingredients={this.state.ingredients}
+          ingredients={this.props.ings}
           checkoutCancelled={this.checkoutCancelledHandler}
           checkoutContinued={this.checkoutContinuedHandler}
         />
         <Route
           path={this.props.match.path + '/contact-data'}
-          render={props => (
-            <ContactData
-              ingredients={this.state.ingredients}
-              price={this.state.totalPrice}
-              {...props}
-            />
-          )}
+          component={ContactData}
         />
       </div>
     );
@@ -89,4 +61,8 @@ class Checkout extends Component {
 // the component will be loaded only when the given path will be reached
 // which will be caused by the click on the button in checkoutSummary
 
-export default Checkout;
+const mapStateToProps = (state) => ({
+  ings: state.ingredients,
+});
+
+export default connect(mapStateToProps)(Checkout);
