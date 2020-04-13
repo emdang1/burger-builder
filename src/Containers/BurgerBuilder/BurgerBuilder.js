@@ -49,25 +49,7 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
-    const queryParams = [];
-
-    for (let ingrKey in this.state.ingredients) {
-      queryParams.push(
-        encodeURIComponent(ingrKey) +
-          '=' +
-          encodeURIComponent(this.state.ingredients[ingrKey])
-      );
-    }
-
-    // at the end of the array we are push the total Price information
-    // that will be used in the ContactData component, when we are sending the request to the BE
-    queryParams.push('price=' + this.state.totalPrice);
-    const queryString = queryParams.join('&');
-
-    this.props.history.push({
-      pathname: '/checkout',
-      search: '?' + queryString,
-    });
+    this.props.history.push('/checkout');
   };
 
   // addIngredientHandler = (type) => {
