@@ -14,6 +14,8 @@ import {
   initIngredients,
 } from '../../store/actions/burgerBuilder';
 
+import { purchaseInit } from '../../store/actions/order';
+
 class BurgerBuilder extends React.Component {
   state = {
     purchasing: false,
@@ -43,6 +45,7 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
+    this.props.onInitPurchase();
     this.props.history.push('/checkout');
   };
 
@@ -119,6 +122,7 @@ const mapDispatchToProps = (dispatch) => ({
   onIngredientAdded: (ingName) => dispatch(addIngredient(ingName)),
   onIngredientRemoved: (ingName) => dispatch(removeIngredient(ingName)),
   onInitIngredients: () => dispatch(initIngredients()),
+  onInitPurchase: () => dispatch(purchaseInit()),
 });
 
 export default connect(

@@ -32,3 +32,7 @@ export const purchaseBurger = (orderData) => {
       });
   };
 };
+
+export const purchaseInit = () => ({
+  type: actionTypes.PURCHASE_INIT,
+});
