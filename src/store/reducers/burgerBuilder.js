@@ -37,10 +37,16 @@ const reducer = (state = initialState, action) => {
       };
     }
 
+    // ingredients tweak - only hardcoded for the required order of the ingredients
     case actionTypes.SET_INGREDIENTS: {
       return {
         ...state,
-        ingredients: action.ingredients,
+        ingredients: {
+          salad: action.ingredients.salad,
+          bacon: action.ingredients.bacon,
+          cheese: action.ingredients.cheese,
+          meat: action.ingredients.meat,
+        },
         error: false,
       };
     }
