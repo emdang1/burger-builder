@@ -11,13 +11,12 @@ import { connect } from 'react-redux';
 import {
   addIngredient,
   removeIngredient,
+  initIngredients,
 } from '../../store/actions/burgerBuilder';
 
 class BurgerBuilder extends React.Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: false,
   };
 
   // due to this fetching data change,
@@ -27,15 +26,7 @@ class BurgerBuilder extends React.Component {
   // there are also other changes below, due to this change
   // also we are catching the error, if theres problem to connecting to backend for example
   componentDidMount() {
-    // axios
-    //   .get('/ingredients.json')
-    //   .then(response => {
-    //     this.setState({ ingredients: response.data });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error: true });
-    //   });
-    // temporarily commented out, because of the redux setup
+    this.props.onInitIngredients();
   }
 
   purchaseHandler = () => {
@@ -69,7 +60,7 @@ class BurgerBuilder extends React.Component {
     // which is by default null
     // it is then real orderSummary component
     let orderSumOrSpinner = null;
-    let burgerOrSpinner = this.state.error ? (
+    let burgerOrSpinner = this.props.error ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
@@ -121,11 +112,13 @@ class BurgerBuilder extends React.Component {
 const mapStateToProps = (state) => ({
   ings: state.ingredients,
   price: state.totalPrice,
+  error: state.error,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onIngredientAdded: (ingName) => dispatch(addIngredient(ingName)),
   onIngredientRemoved: (ingName) => dispatch(removeIngredient(ingName)),
+  onInitIngredients: () => dispatch(initIngredients()),
 });
 
 export default connect(
