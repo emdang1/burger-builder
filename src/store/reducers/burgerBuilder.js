@@ -38,6 +38,7 @@ const reducer = (state = initialState, action) => {
     }
 
     // ingredients tweak - only hardcoded for the required order of the ingredients
+    // totalPrice setted to 0, everytime burgerBuilder is mounted we set the ingredients and "reset" totalPrice
     case actionTypes.SET_INGREDIENTS: {
       return {
         ...state,
@@ -48,6 +49,7 @@ const reducer = (state = initialState, action) => {
           meat: action.ingredients.meat,
         },
         error: false,
+        totalPrice: 0,
       };
     }
 
