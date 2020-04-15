@@ -8,13 +8,17 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import axios from '../../axios-orders';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import {
+  addIngredient,
+  removeIngredient,
+  initIngredients,
+} from '../../store/actions/burgerBuilder';
+
+import { purchaseInit } from '../../store/actions/order';
 
 class BurgerBuilder extends React.Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: false,
   };
 
   // due to this fetching data change,
@@ -24,15 +28,7 @@ class BurgerBuilder extends React.Component {
   // there are also other changes below, due to this change
   // also we are catching the error, if theres problem to connecting to backend for example
   componentDidMount() {
-    // axios
-    //   .get('/ingredients.json')
-    //   .then(response => {
-    //     this.setState({ ingredients: response.data });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error: true });
-    //   });
-    // temporarily commented out, because of the redux setup
+    this.props.onInitIngredients();
   }
 
   purchaseHandler = () => {
@@ -49,34 +45,9 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
+    this.props.onInitPurchase();
     this.props.history.push('/checkout');
   };
-
-  // addIngredientHandler = (type) => {
-  //   const oldCount = this.state.ingredients[type];
-  //   const newCount = oldCount + 1;
-  //   this.setState(
-  //     (prevState) => ({
-  //       ingredients: { ...prevState.ingredients, [type]: newCount },
-  //       totalPrice: prevState.totalPrice + INGREDIENT_PRICES[type],
-  //     }),
-  //     this.updatePurchaseState
-  //   );
-  // };
-
-  // removeIngredientHandler = (type) => {
-  //   const oldCount = this.state.ingredients[type];
-  //   if (oldCount > 0) {
-  //     const newCount = oldCount - 1;
-  //     this.setState(
-  //       (prevState) => ({
-  //         ingredients: { ...prevState.ingredients, [type]: newCount },
-  //         totalPrice: prevState.totalPrice - INGREDIENT_PRICES[type],
-  //       }),
-  //       this.updatePurchaseState
-  //     );
-  //   }
-  // };
 
   render() {
     let disabledInfo = {
@@ -92,7 +63,7 @@ class BurgerBuilder extends React.Component {
     // which is by default null
     // it is then real orderSummary component
     let orderSumOrSpinner = null;
-    let burgerOrSpinner = this.state.error ? (
+    let burgerOrSpinner = this.props.error ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
@@ -142,15 +113,16 @@ class BurgerBuilder extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  ings: state.ingredients,
-  price: state.totalPrice,
+  ings: state.burgerBuilder.ingredients,
+  price: state.burgerBuilder.totalPrice,
+  error: state.burgerBuilder.error,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onIngredientAdded: (ingName) =>
-    dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
-  onIngredientRemoved: (ingName) =>
-    dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName }),
+  onIngredientAdded: (ingName) => dispatch(addIngredient(ingName)),
+  onIngredientRemoved: (ingName) => dispatch(removeIngredient(ingName)),
+  onInitIngredients: () => dispatch(initIngredients()),
+  onInitPurchase: () => dispatch(purchaseInit()),
 });
 
 export default connect(

@@ -6,6 +6,8 @@ import Input from '../../../Components/UI/Input/Input';
 
 import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
+import { purchaseBurger } from '../../../store/actions/order';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 class ContactData extends Component {
   // order form config for dynamically outputing the custom input elements
@@ -92,48 +94,26 @@ class ContactData extends Component {
       },
     },
     formIsValid: false,
-    loading: false,
   };
 
   orderHandler = (event) => {
     // prevents from default "sending request"
     event.preventDefault();
 
+    // creating object with key-value pairs of the form inputs
     let formData = {};
     for (let key in this.state.orderForm) {
       formData[key] = this.state.orderForm[key].value;
     }
 
-    // showing loading spinner
-    this.setState({ loading: true });
-
-    // officialy, price shouldnt be sent from frontend
-    // it should be recalculated on the backend
-    // we should just sent the needed data for the calculation
-    // we created a dummy order object
+    // creating order object which hold needed info
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData,
     };
 
-    // .json is needed because of firebase
-    axios
-      .post('/orders.json', order)
-      .then((response) => {
-        // hiding the loading spinner after getting the response
-        // and closing the modal also  through purchasing state
-        // purchasing state was removed ... this whole code for transfered
-        // from burgerbuilder
-
-        // the .history props comes from the spreading the props
-        // in the render method in checkout component
-        this.setState({ loading: false });
-        this.props.history.push('/');
-      })
-      .catch((error) => {
-        this.setState({ loading: false });
-      });
+    this.props.onOrderBurger(order);
   };
 
   // method to check if the input is valid or not
@@ -228,7 +208,7 @@ class ContactData extends Component {
       </form>
     );
 
-    if (this.state.loading) {
+    if (this.props.loading) {
       formOrSpinner = <Spinner />;
     }
     return (
@@ -241,8 +221,16 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ings: state.ingredients,
-  price: state.totalPrice,
+  ings: state.burgerBuilder.ingredients,
+  price: state.burgerBuilder.totalPrice,
+  loading: state.order.loading,
 });
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = (dispatch) => ({
+  onOrderBurger: (orderData) => dispatch(purchaseBurger(orderData)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
