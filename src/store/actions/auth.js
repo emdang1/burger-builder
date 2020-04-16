@@ -43,9 +43,9 @@ export const auth = (email, password, isSignup) => {
         dispatch(authSuccess(response.data));
       })
       .catch((error) => {
-        console.log(error);
         debugger;
-        dispatch(authFail(error));
+        // to access real main object, you need to error.response.data.error (this is the main object with info)
+        dispatch(authFail(error.response.data.error));
       });
   };
 };
