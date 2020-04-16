@@ -39,11 +39,12 @@ export const auth = (email, password, isSignup) => {
     axios
       .post(signupOrSigninUrl, authData)
       .then((response) => {
-        console.log(response);
+        // console.log(response.data);
         dispatch(authSuccess(response.data));
       })
       .catch((error) => {
         console.log(error);
+        debugger;
         dispatch(authFail(error));
       });
   };
