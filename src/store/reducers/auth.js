@@ -36,6 +36,15 @@ const reducer = (state = initialState, action) => {
       };
     }
 
+    // logging out = deleting the userId and token
+    case actionTypes.AUTH_LOGOUT: {
+      return {
+        ...state,
+        userId: null,
+        token: null,
+      };
+    }
+
     default:
       return state;
   }
