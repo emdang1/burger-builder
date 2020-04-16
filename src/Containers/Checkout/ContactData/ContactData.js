@@ -113,7 +113,7 @@ class ContactData extends Component {
       orderData: formData,
     };
 
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order, this.props.token);
   };
 
   // method to check if the input is valid or not
@@ -224,10 +224,12 @@ const mapStateToProps = (state) => ({
   ings: state.burgerBuilder.ingredients,
   price: state.burgerBuilder.totalPrice,
   loading: state.order.loading,
+  token: state.auth.token,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onOrderBurger: (orderData) => dispatch(purchaseBurger(orderData)),
+  onOrderBurger: (orderData, token) =>
+    dispatch(purchaseBurger(orderData, token)),
 });
 
 export default connect(
