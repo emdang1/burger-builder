@@ -6,6 +6,7 @@ import './App.css';
 import Checkout from './Containers/Checkout/Checkout';
 import { Route, Switch } from 'react-router-dom';
 import Auth from './Containers/Auth/Auth';
+import Logout from './Containers/Auth/Logout/Logout';
 
 class App extends React.Component {
   render() {
@@ -13,10 +14,11 @@ class App extends React.Component {
       <div>
         <Layout>
           <Switch>
-            <Route path='/' exact component={BurgerBuilder} />
             <Route path='/checkout' component={Checkout} />
             <Route path='/orders' component={Orders} />
             <Route path='/auth' component={Auth} />
+            <Route path='/logout' component={Logout} />
+            <Route path='/' exact component={BurgerBuilder} />
           </Switch>
         </Layout>
       </div>
