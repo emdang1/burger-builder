@@ -4,7 +4,7 @@ import Input from '../../Components/UI/Input/Input';
 import Button from '../../Components/UI/Button/Button';
 import Spinner from '../../Components/UI/Spinner/Spinner';
 import { connect } from 'react-redux';
-import { auth } from '../../store/actions/auth';
+import { auth, setAuthRedirectPath } from '../../store/actions/auth';
 import { Redirect } from 'react-router-dom';
 
 class Auth extends Component {
@@ -41,6 +41,12 @@ class Auth extends Component {
     },
     isSignUp: true,
   };
+
+  componentDidMount() {
+    if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
+      this.props.onSethAuthRedirectPath();
+    }
+  }
 
   switchAuthModeHandler = () => {
     this.setState((prevState) => ({ isSignUp: !prevState.isSignUp }));
@@ -145,7 +151,7 @@ class Auth extends Component {
     ) : null;
 
     let ifAuthenticatedRedirect = this.props.isAuthenticated ? (
-      <Redirect to='/' />
+      <Redirect to={this.props.authRedirectPath} />
     ) : null;
     return (
       <div className={classes.AuthForm}>
@@ -167,10 +173,13 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading,
   error: state.auth.error,
   isAuthenticated: state.auth.userId != null,
+  buildingBurger: state.burgerBuilder.building,
+  authRedirectPath: state.auth.authRedirectPath,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onAuth: (email, password, isSignup) =>
     dispatch(auth(email, password, isSignup)),
+  onSethAuthRedirectPath: () => dispatch(setAuthRedirectPath('/')),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
