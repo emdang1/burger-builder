@@ -4,11 +4,18 @@ import BurgerBuilder from './Containers/BurgerBuilder/BurgerBuilder';
 import Orders from './Containers/Orders/Orders';
 import './App.css';
 import Checkout from './Containers/Checkout/Checkout';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Auth from './Containers/Auth/Auth';
 import Logout from './Containers/Auth/Logout/Logout';
+import { connect } from 'react-redux';
+import { tryAuthCheck } from './store/actions/auth';
 
 class App extends React.Component {
+  componentDidMount() {
+    debugger;
+    this.props.onTryAuthCheck();
+  }
+
   render() {
     return (
       <div>
@@ -26,4 +33,8 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  onTryAuthCheck: () => dispatch(tryAuthCheck()),
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(App));
