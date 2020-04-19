@@ -6,6 +6,7 @@ import Spinner from '../../Components/UI/Spinner/Spinner';
 import { connect } from 'react-redux';
 import { auth, setAuthRedirectPath } from '../../store/actions/auth';
 import { Redirect } from 'react-router-dom';
+import { checkValidity } from '../../shared/utility';
 
 class Auth extends Component {
   state = {
@@ -66,27 +67,6 @@ class Auth extends Component {
     this.props.onAuth(authData.email, authData.password, this.state.isSignUp);
   };
 
-  checkValidity = (inputValue, rules) => {
-    let isValid = true;
-
-    // if there's required prop defined for this input
-    // set isValid to true - if trimmed inputValue is not equal to an empty string
-    // && true value trick = every check needs to pass or "isValid" will be false from the first problem
-    if (rules.required) {
-      isValid = inputValue.trim() !== '' && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = inputValue.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = inputValue.length <= rules.maxLength && isValid;
-    }
-
-    return isValid;
-  };
-
   inputChangedHandler = (event, inputIdentifier) => {
     // event is synthetic event -> treated like sync code
     // so we have to extract the value before and then use it in the setState
@@ -102,7 +82,7 @@ class Auth extends Component {
         [inputIdentifier]: {
           ...state.AuthForm[inputIdentifier],
           value: eventValue,
-          valid: this.checkValidity(
+          valid: checkValidity(
             eventValue,
             state.AuthForm[inputIdentifier].validation
           ),

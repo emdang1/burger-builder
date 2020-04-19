@@ -8,6 +8,7 @@ import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
 import { purchaseBurger } from '../../../store/actions/order';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import { checkValidity } from '../../../shared/utility';
 
 class ContactData extends Component {
   // order form config for dynamically outputing the custom input elements
@@ -117,29 +118,6 @@ class ContactData extends Component {
     this.props.onOrderBurger(order, this.props.token);
   };
 
-  // method to check if the input is valid or not
-  // returns true / false
-  checkValidity = (inputValue, rules) => {
-    let isValid = true;
-
-    // if there's required prop defined for this input
-    // set isValid to true - if trimmed inputValue is not equal to an empty string
-    // && true value trick = every check needs to pass or "isValid" will be false from the first problem
-    if (rules.required) {
-      isValid = inputValue.trim() !== '' && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = inputValue.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = inputValue.length <= rules.maxLength && isValid;
-    }
-
-    return isValid;
-  };
-
   inputChangedHandler = (event, inputIdentifier) => {
     // copying the whole state - but only one level deep
     const updatedOrderForm = {
@@ -157,7 +135,7 @@ class ContactData extends Component {
 
     // ------------ input validity check - before updating the copied object and putting it in the state
     // after verifying, we are setting the valid property to respective value
-    updatedFormElement.valid = this.checkValidity(
+    updatedFormElement.valid = checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
