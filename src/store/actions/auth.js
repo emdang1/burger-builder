@@ -32,7 +32,6 @@ export const logout = () => {
 // *1000 because setTimeout takes the parameter as in miliseconds, but expiration comes in seconds
 export const checkAuthTimeout = (expiration) => {
   return (dispatch) => {
-    debugger;
     setTimeout(() => {
       dispatch(logout());
     }, expiration * 1000);
