@@ -81,7 +81,6 @@ export const auth = (email, password, isSignup) => {
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
       .catch((error) => {
-        debugger;
         // to access real main object, you need to error.response.data.error (this is the main object with info)
         dispatch(authFail(error.response.data.error));
       });
@@ -97,7 +96,6 @@ export const tryAuthCheck = () => {
   // not an async code, but still using "thunk" dispatch
   // to dispatch different actions depending if we have valid token or not
 
-  debugger;
   return (dispatch) => {
     // getting the previously stored token
     const token = localStorage.getItem('token');
@@ -124,7 +122,6 @@ export const tryAuthCheck = () => {
         // checkAuthTimeOut - but we must not forget to update the time ("real" remining time of validity)
         // so we want be logout after default "1 hour" but after the remaining time
         dispatch(authSuccess(tokenAndUser));
-        debugger;
         dispatch(
           checkAuthTimeout(
             (localStorage.getItem('tokenExpirationDate') -

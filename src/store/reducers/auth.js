@@ -20,7 +20,6 @@ const reducer = (state = initialState, action) => {
     }
 
     case actionTypes.AUTH_SUCCESS: {
-      debugger;
       return {
         ...state,
         token: action.authData.idToken,
