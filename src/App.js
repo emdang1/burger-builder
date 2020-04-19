@@ -26,7 +26,6 @@ class App extends React.Component {
       </Switch>
     );
 
-    debugger;
     // authenticated routes
     // redirect for "unknown" or every other routes
     if (this.props.isAuthenticated) {

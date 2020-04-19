@@ -52,12 +52,16 @@ export const fetchOrdersStart = () => ({
   type: actionTypes.FETCH_ORDERS_START,
 });
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
   return (dispatch) => {
     dispatch(fetchOrdersStart());
 
+    // added after we wanted to fetch only user's orders
+    // orderBy and equalTo is a firebase "trick" for filter
+    const queryparams =
+      '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
     axios
-      .get('/orders.json?auth=' + token)
+      .get('/orders.json' + queryparams)
       .then((res) => {
         // new const for holding the fetched orders
         const fetchedOrders = [];

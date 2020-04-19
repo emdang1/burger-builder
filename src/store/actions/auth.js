@@ -102,7 +102,7 @@ export const tryAuthCheck = () => {
     // we have to check if we even have a token
     // if no, dispatch logout action
     // if yes, verify if the token is still valid or not
-    debugger;
+
     if (!token) {
       dispatch(logout());
     } else {
