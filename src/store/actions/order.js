@@ -16,14 +16,14 @@ export const purchaseBurgerStart = () => ({
   type: actionTypes.PURCHASE_BURGER_START,
 });
 
-export const purchaseBurger = (orderData) => {
+export const purchaseBurger = (orderData, token) => {
   return (dispatch) => {
     // first dispatch - setting loading to true
     dispatch(purchaseBurgerStart());
 
     // async code - next dispatches success / fail
     axios
-      .post('/orders.json', orderData)
+      .post('/orders.json?auth=' + token, orderData)
       .then((response) => {
         dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
@@ -52,12 +52,16 @@ export const fetchOrdersStart = () => ({
   type: actionTypes.FETCH_ORDERS_START,
 });
 
-export const fetchOrders = () => {
+export const fetchOrders = (token, userId) => {
   return (dispatch) => {
     dispatch(fetchOrdersStart());
 
+    // added after we wanted to fetch only user's orders
+    // orderBy and equalTo is a firebase "trick" for filter
+    const queryparams =
+      '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
     axios
-      .get('/orders.json')
+      .get('/orders.json' + queryparams)
       .then((res) => {
         // new const for holding the fetched orders
         const fetchedOrders = [];
