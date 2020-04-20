@@ -17,7 +17,7 @@ import {
 import { purchaseInit } from '../../store/actions/order';
 import { setAuthRedirectPath } from '../../store/actions/auth';
 
-class BurgerBuilder extends React.Component {
+export class BurgerBuilder extends React.Component {
   state = {
     purchasing: false,
   };
@@ -96,7 +96,7 @@ class BurgerBuilder extends React.Component {
           ingredients={this.props.ings}
           purchaseCanceled={this.purchaseCancelHandler}
           purchaseContinued={this.purchaseContinueHandler}
-          totalPrice={this.props.price.toFixed(2)}
+          totalPrice={this.props.price}
         />
       );
     }
