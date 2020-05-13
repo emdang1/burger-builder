@@ -22,12 +22,6 @@ export class BurgerBuilder extends React.Component {
     purchasing: false,
   };
 
-  // due to this fetching data change,
-  // the "ingredients" state is set to null
-  // after fetching the data we are setting the data object as ingredients state
-
-  // there are also other changes below, due to this change
-  // also we are catching the error, if theres problem to connecting to backend for example
   componentDidMount() {
     this.props.onInitIngredients();
   }
@@ -60,14 +54,6 @@ export class BurgerBuilder extends React.Component {
       ...this.props.ings,
     };
 
-    // these variables are related to the fetching data change
-    // by default we have burgerOrSpinner as a spinner component
-    // or error paragraph
-    // and we are checking if the ingredients are "truthy" aka not null
-    // if so, the burgerOrspinner component is override to burger + burgercontrols
-    // and also we are overriding the orderSumOrSpinner component (since is dependent od the ingredients state)
-    // which is by default null
-    // it is then real orderSummary component
     let orderSumOrSpinner = null;
     let burgerOrSpinner = this.props.error ? (
       <p>Ingredients can't be loaded</p>

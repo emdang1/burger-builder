@@ -10,7 +10,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    // error set to null for "resetting purposes, if it was changed previously"
     case actionTypes.AUTH_START: {
       return {
         ...state,
@@ -37,7 +36,6 @@ const reducer = (state = initialState, action) => {
       };
     }
 
-    // logging out = deleting the userId and token
     case actionTypes.AUTH_LOGOUT: {
       return {
         ...state,

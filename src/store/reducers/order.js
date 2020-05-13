@@ -50,8 +50,6 @@ const reducer = (state = initialState, action) => {
       };
     }
 
-    // loading will be set to true to turn it off
-    // it will be on only until the fetch will be resolved
     case actionTypes.FETCH_ORDERS_SUCCESS: {
       return {
         ...state,

@@ -4,7 +4,6 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 import { connect } from 'react-redux';
 
-// added named export for usage in testing
 export const Navigation = (props) => (
   <ul className={classes.NavigationItems}>
     <NavigationItem link='/' exact>
@@ -27,6 +26,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Navigation);
-
-// "active" can be left like this - because its boolean value
-// active={true} is the same thing

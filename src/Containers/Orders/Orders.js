@@ -16,7 +16,6 @@ class Orders extends Component {
     const finalOrders = orders.map((order) => (
       <Order
         key={order.id}
-        // ingredients is an object
         ingredients={order.ingredients}
         price={order.price}
       />
