@@ -11,10 +11,6 @@ configure({ adapter: new Adapter() });
 describe('<BurgerBuilder/>', () => {
   let wrapper;
 
-  // if the component needs or accesses some prop right on the componentDidMount
-  // you need to pass it here, in the shallow method, thats like "mounting it", so thats the reason
-  // you cannot do it through the "setProps", that is already too late
-  // here we are just passing an anonymous function to fulfill the need of this prop, thats it
   beforeEach(() => {
     wrapper = shallow(<BurgerBuilder onInitIngredients={() => {}} />);
   });

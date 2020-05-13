@@ -4,7 +4,6 @@ import classes from './Input.module.css';
 const input = (props) => {
   let inputElement = null;
 
-  // default className array - used for appending invalid class
   const inputClasses = [classes.InputElement];
   let validationError = null;
 
@@ -17,8 +16,6 @@ const input = (props) => {
 
   switch (props.elementType) {
     case 'input':
-      // spreading props onto the original element
-      // so all we have to do is set the "inputType" and then use the default props
       inputElement = (
         <input
           className={inputClasses.join(' ')}

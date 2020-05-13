@@ -54,10 +54,8 @@ class Auth extends Component {
   };
 
   submitHandler = (event) => {
-    // prevents from default "sending request" and refreshing
     event.preventDefault();
 
-    // creating object with key-value pairs of the form inputs
     let authData = {};
 
     for (let key in this.state.AuthForm) {
@@ -68,11 +66,6 @@ class Auth extends Component {
   };
 
   inputChangedHandler = (event, inputIdentifier) => {
-    // event is synthetic event -> treated like sync code
-    // so we have to extract the value before and then use it in the setState
-    // because this form of setState (with parameter) is async code
-    // otherwise we would get an error
-
     let eventValue = event.target.value;
 
     this.setState((state) => ({
@@ -90,15 +83,9 @@ class Auth extends Component {
         },
       },
     }));
-
-    // in this case, we are not checking if the whole form is valid and we are not
-    // disabling the submit button
-    // because we want to treated differently than normal form
-    // wrong and missing credentials submit etc
   };
 
   render() {
-    // passing newly created objects into array, so we can loop through
     let authFormElementsArray = [];
     for (let key in this.state.AuthForm) {
       authFormElementsArray.push({
@@ -162,4 +149,5 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(auth(email, password, isSignup)),
   onSethAuthRedirectPath: () => dispatch(setAuthRedirectPath('/')),
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

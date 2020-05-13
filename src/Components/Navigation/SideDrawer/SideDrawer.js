@@ -26,6 +26,3 @@ const sideDrawer = (props) => {
 };
 
 export default sideDrawer;
-
-// Backdrop is outside of the sidedrawer div
-// otherwise it would be included inside of the sidedrawer

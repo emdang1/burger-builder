@@ -11,7 +11,6 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import { checkValidity } from '../../../shared/utility';
 
 class ContactData extends Component {
-  // order form config for dynamically outputing the custom input elements
   state = {
     orderForm: {
       name: {
@@ -98,16 +97,13 @@ class ContactData extends Component {
   };
 
   orderHandler = (event) => {
-    // prevents from default "sending request"
     event.preventDefault();
 
-    // creating object with key-value pairs of the form inputs
     let formData = {};
     for (let key in this.state.orderForm) {
       formData[key] = this.state.orderForm[key].value;
     }
 
-    // creating order object which hold needed info
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
@@ -119,45 +115,32 @@ class ContactData extends Component {
   };
 
   inputChangedHandler = (event, inputIdentifier) => {
-    // copying the whole state - but only one level deep
     const updatedOrderForm = {
       ...this.state.orderForm,
     };
 
-    // copying the single element (name, country etc.)
     const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
 
-    // accessing value property of that copied element and changing it to event.target.value
     updatedFormElement.value = event.target.value;
 
-    // changing the "touched" prop
     updatedFormElement.touched = true;
 
-    // ------------ input validity check - before updating the copied object and putting it in the state
-    // after verifying, we are setting the valid property to respective value
     updatedFormElement.valid = checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
 
-    // putting the newly updated single element into copied form state to the right prop
     updatedOrderForm[inputIdentifier] = updatedFormElement;
-
-    // after all changes, we need to make sure our whole form is valid
-    // aka go through every single element and its .valid prop
-    // using the "&& trick"
 
     let formIsValid = true;
     for (let elementKey in updatedOrderForm) {
       formIsValid = updatedOrderForm[elementKey].valid && formIsValid;
     }
 
-    // setting state by putting newly updatedOrderForm to the orderForm prop
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   };
 
   render() {
-    // tranforming orderForm state object into separate element objects in array
     let orderFormArray = [];
     for (let key in this.state.orderForm) {
       orderFormArray.push({

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './BurgerIngredient.module.css';
 
-const burgerIngredient = props => {
-  // let variable which will hold the final JSX, which will be used in the end in return statement
+const burgerIngredient = (props) => {
   let ingredient = null;
 
   switch (props.type) {
@@ -37,7 +36,7 @@ const burgerIngredient = props => {
 };
 
 burgerIngredient.propTypes = {
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 export default burgerIngredient;
