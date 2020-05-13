@@ -37,7 +37,6 @@ export const auth = (email, password, isSignup) => {
   return (dispatch) => {
     dispatch(authStart());
 
-    // [API KEY] was changed to Key of my project
     let signupOrSigninUrl = isSignup
       ? `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_API_KEY}`
       : `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API_KEY}`;
