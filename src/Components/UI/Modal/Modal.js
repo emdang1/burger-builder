@@ -24,9 +24,9 @@ class Modal extends Component {
   // return true , which means >>> this component should update
   // and all nested components with it
 
-  componentDidUpdate() {
-    console.log('modal updated');
-  }
+  // componentDidUpdate() {
+  //   console.log('modal updated');
+  // }
 
   render() {
     return (
@@ -36,7 +36,7 @@ class Modal extends Component {
           className={classes.Modal}
           style={{
             transform: this.props.show ? 'translateY(0)' : 'translateY(-100vh)',
-            opacity: this.props.show ? '1' : '0'
+            opacity: this.props.show ? '1' : '0',
           }}
         >
           {this.props.children}
